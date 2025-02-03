@@ -13,10 +13,19 @@ public class TARS {
             line = sc.nextLine().strip();
             if (line.equals("bye")) {
                 break;
+            } else if (line.equals("list")) {
+                System.out.println("    ____________________________________________________________");
+                for (int i = 0; i < nTasks; i++) {
+                    System.out.println("    " + (i+1) + ". " +taskList[i]);
+                }
+                System.out.println("    ____________________________________________________________");
+
             } else {
                 System.out.println("    ____________________________________________________________");
-                System.out.println("    " + line);
+                System.out.println("    added: " + line);
                 System.out.println("    ____________________________________________________________");
+
+                taskList[nTasks++] = line;
             }
         }
 
