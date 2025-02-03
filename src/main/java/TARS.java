@@ -1,6 +1,20 @@
+import java.util.Scanner;
+
 public class TARS {
+
     public static void main(String[] args) {
         printHelloMessage();
+        String line;
+        Scanner sc = new Scanner(System.in);
+
+        do {
+            line = sc.nextLine().strip();
+            System.out.println("____________________________________________________________");
+            System.out.println(line);
+            System.out.println("____________________________________________________________");
+
+        } while (!line.equals("bye"));
+        
         printGoodbyeMessage();
     }
 
