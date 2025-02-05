@@ -36,12 +36,12 @@ public class TARS {
             } else if (line.startsWith("mark") || line.startsWith("unmark")) {
                 int index = parseMarkCommand(line);
                 boolean isMarking = line.startsWith("mark");
-
                 markHandler(index, isMarking);
 
-
             } else {
-                addTask(line);
+                Task newTask = taskParser(line);
+                addTask(newTask);
+
             }
         }
 
@@ -74,15 +74,21 @@ public class TARS {
     }
 
     /**
-     * Appends user input to taskList array
-     * @param description Task description
+     * Appends new Task object to taskList array
+     * @param newTask Task Object
      */
-    private static void addTask(String description) {
+    private static void addTask(Task newTask) {
+
+        taskList[nTasks] = newTask;
+
         System.out.println(LINE_SEPERATOR);
-        System.out.println("    added: " + description);
+        System.out.println("    Yes Captain. I've added this task.");
+        System.out.println("      " + taskList[nTasks]);
+
+        nTasks++;
+        System.out.println("    There are " + nTasks + " tasks in your list.");
         System.out.println(LINE_SEPERATOR);
 
-        taskList[nTasks++] = new Task(description);
     }
 
     /**
@@ -120,11 +126,65 @@ public class TARS {
         System.out.println(LINE_SEPERATOR);
         System.out.println(
             isMarking
-                ? "    Your task has been marked as done."
+                ? "    Task Done. Good job Captain!"
                 : "    Ok, your task is marked as not done yet."
         );
         System.out.println("      " + taskList[index]);
         System.out.println(LINE_SEPERATOR);
+    }
+
+    /**
+     * takes user input line and parses out Task attributes to return Task Object
+     * parsing logic depends on command type
+     * WARNING: only basic input validation implemented
+     * @param line user input String
+     * @return Todo, Deadline or Event Object
+     */
+    private static Task taskParser(String line) {
+        Task newTask = null;
+        String description = null;
+        String by  = null;
+        String from = null;
+        String to = null;
+
+        // Eg. event E /from a /to b
+        //     commandType = "event";  commandBody = "E /from a /to b";
+        String commandType = line.substring(0, line.indexOf(" "));
+        String commandBody = line.substring(line.indexOf(" ") + 1);
+
+
+        if (!commandType.isEmpty() && (commandType.equals("todo") || commandType.equals("deadline") || commandType.equals("event"))) {
+
+            description = commandBody;
+            // Handle /by
+            int byIndex = commandBody.indexOf("/by");
+            if (byIndex != -1) {
+                by = commandBody.substring(byIndex + 3).trim();
+                description = commandBody.substring(0, byIndex).trim();
+            }
+
+            int fromIndex = commandBody.indexOf("/from");
+            int toIndex = commandBody.indexOf("/to");
+
+            if (fromIndex != -1 && toIndex != -1 && fromIndex < toIndex) {
+                from = description.substring(fromIndex + 5, toIndex).trim();
+                to = description.substring(toIndex + 3).trim();
+                description = description.substring(0, fromIndex).trim();
+            }
+
+            switch (commandType) {
+            case "todo":
+                newTask = new Todo(description);
+                break;
+            case "deadline":
+                newTask = new Deadline(description, by);
+                break;
+            case "event":
+                newTask = new Event(description, to, from);
+                break;
+            }
+        }
+        return newTask;
     }
 
 }

@@ -21,9 +21,13 @@ public class Task {
         this.isDone = isDone;
     }
 
+    public String getSymbol() {
+        return " ";
+    }
+
     @Override
     public String toString() {
-        return "[" + (this.isDone ? "X" : " ") + "] " + this.description;
+        return "[" + getSymbol() + "][" + (this.isDone ? "X" : " ") + "] " + this.description;
     }
 
 }
