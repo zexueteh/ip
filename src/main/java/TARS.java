@@ -44,6 +44,7 @@ public class TARS {
 
             }
         }
+        sc.close();
 
         printGoodbyeMessage();
     }
@@ -53,13 +54,12 @@ public class TARS {
      */
     private static void printHelloMessage() {
         System.out.println(LINE_SEPERATOR);
-        System.out.println("      _____  _    ____  ____  ");
-        System.out.println("     |_   _|/ \\  |  _ \\/ ___| ");
-        System.out.println("       | | / _ \\ | |_) \\___ \\ ");
+        System.out.println("      _____  _    ____  ____");
+        System.out.println("     |_   _|/ \\  |  _ \\/ ___|");
+        System.out.println("       | | / _ \\ | |_) \\___ \\");
         System.out.println("       | |/ ___ \\|  _ < ___) |");
-        System.out.println("       |_/_/   \\_\\_| \\_\\____/ ");
-        System.out.println("                              ");
-        System.out.println("    Hello, I'm TARS, your friendly chatbot assistant. ");
+        System.out.println("       |_/_/   \\_\\_| \\_\\____/");
+        System.out.println("    Hello, I'm TARS, your friendly chatbot assistant.");
         System.out.println("    How can I help you today?");
         System.out.println(LINE_SEPERATOR);
     }
@@ -69,7 +69,7 @@ public class TARS {
      */
     private static void printGoodbyeMessage() {
         System.out.println(LINE_SEPERATOR);
-        System.out.println("    Goodbye and Goodnight! ");
+        System.out.println("    Goodbye and Goodnight!");
         System.out.println(LINE_SEPERATOR);
     }
 
