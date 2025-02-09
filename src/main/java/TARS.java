@@ -1,7 +1,17 @@
 import java.util.Scanner;
 
 public class TARS {
-    private static final String LINE_SEPERATOR = "    ____________________________________________________________";
+    private static final String LINE_SEPERATOR = "\t____________________________________________________________";
+    private static final String WELCOME_MESSAGE = """
+            \t  _____  _    ____  ____
+            \t |_   _|/ \\  |  _ \\/ ___|
+            \t   | | / _ \\ | |_) \\___ \\
+            \t   | |/ ___ \\|  _ < ___) |
+            \t   |_/_/   \\_\\_| \\_\\____/
+            \tHello, I'm TARS, your friendly chatbot assistant.
+            \tHow can I help you today?""";
+    public static final String GOODBYE_MESSAGE = "\tGoodnight Captain. Sleep well.";
+
     private static int nTasks = 0;
     private static final int MAX_TASK = 100;
     private static Task[] taskList = new Task[MAX_TASK];
@@ -29,24 +39,31 @@ public class TARS {
 
         while (true) {
             line = sc.nextLine().strip();
-            if (line.equals("bye")) {
+            String commandType = parseCommandType(line);
+
+            if (commandType.equals("bye")) {
                 break;
-            } else if (line.equals("list")) {
+            }
+            switch (commandType) {
+            case "list":
                 printTaskList();
-            } else if (line.startsWith("mark") || line.startsWith("unmark")) {
+                break;
+            case "mark":
+            case "unmark":
                 int index = parseMarkCommand(line);
                 boolean isMarking = line.startsWith("mark");
                 markHandler(index, isMarking);
-
-            } else {
-                Task newTask = taskParser(line);
-                addTask(newTask);
-
+                break;
+            default:
+                Task newTask = taskParser(line, commandType);
+                if (newTask != null) {
+                    addTask(newTask);
+                }
+                break;
             }
         }
-        sc.close();
-
         printGoodbyeMessage();
+        sc.close();
     }
 
     /**
@@ -54,13 +71,7 @@ public class TARS {
      */
     private static void printHelloMessage() {
         System.out.println(LINE_SEPERATOR);
-        System.out.println("      _____  _    ____  ____");
-        System.out.println("     |_   _|/ \\  |  _ \\/ ___|");
-        System.out.println("       | | / _ \\ | |_) \\___ \\");
-        System.out.println("       | |/ ___ \\|  _ < ___) |");
-        System.out.println("       |_/_/   \\_\\_| \\_\\____/");
-        System.out.println("    Hello, I'm TARS, your friendly chatbot assistant.");
-        System.out.println("    How can I help you today?");
+        System.out.println(WELCOME_MESSAGE);
         System.out.println(LINE_SEPERATOR);
     }
 
@@ -69,9 +80,24 @@ public class TARS {
      */
     private static void printGoodbyeMessage() {
         System.out.println(LINE_SEPERATOR);
-        System.out.println("    Goodbye and Goodnight!");
+        System.out.println(GOODBYE_MESSAGE);
         System.out.println(LINE_SEPERATOR);
     }
+
+    /**
+     * Parses user input line for commandType
+     * @param line user input String as a command
+     * @return first word in line as commandType
+     */
+    private static String parseCommandType(String line) {
+        int commandEndIndex = (line.contains(" ") ?
+                line.indexOf(" ") :
+                line.length()
+        ); // handling single word commands without space character
+
+        return line.substring(0, commandEndIndex);
+    }
+
 
     /**
      * Appends new Task object to taskList array
@@ -82,11 +108,11 @@ public class TARS {
         taskList[nTasks] = newTask;
 
         System.out.println(LINE_SEPERATOR);
-        System.out.println("    Yes Captain. I've added this task.");
-        System.out.println("      " + taskList[nTasks]);
+        System.out.println("\tYes Captain. I've added this task.");
+        System.out.println("\t" + taskList[nTasks]);
 
         nTasks++;
-        System.out.println("    There are " + nTasks + " tasks in your list.");
+        System.out.println("\tThere are " + nTasks + " tasks in your list.");
         System.out.println(LINE_SEPERATOR);
 
     }
@@ -96,7 +122,7 @@ public class TARS {
      */
     private static void printTaskList() {
         System.out.println(LINE_SEPERATOR);
-        System.out.println("    Here are the tasks in your list:");
+        System.out.println("\tHere are the tasks in your list:");
         for (int i = 0; i < nTasks; i++) {
             System.out.println("    " + (i+1) + "." +taskList[i]);
         }
@@ -126,8 +152,8 @@ public class TARS {
         System.out.println(LINE_SEPERATOR);
         System.out.println(
             isMarking
-                ? "    Task Done. Good job Captain!"
-                : "    Ok, your task is marked as not done yet."
+                ? "\tTask Done. Good job Captain!"
+                : "\tOk, your task is marked as not done yet."
         );
         System.out.println("      " + taskList[index]);
         System.out.println(LINE_SEPERATOR);
@@ -137,10 +163,11 @@ public class TARS {
      * takes user input line and parses out Task attributes to return Task Object
      * parsing logic depends on command type
      * WARNING: only basic input validation implemented
-     * @param line user input String
+     * @param line user input String as a command
+     * @param commandType first word in line representing type of command
      * @return Todo, Deadline or Event Object
      */
-    private static Task taskParser(String line) {
+    private static Task taskParser(String line, String commandType) {
         Task newTask = null;
         String description = null;
         String by  = null;
@@ -149,20 +176,23 @@ public class TARS {
 
         // Eg. event E /from a /to b
         //     commandType = "event";  commandBody = "E /from a /to b";
-        String commandType = line.substring(0, line.indexOf(" "));
         String commandBody = line.substring(line.indexOf(" ") + 1);
 
-
-        if (!commandType.isEmpty() && (commandType.equals("todo") || commandType.equals("deadline") || commandType.equals("event"))) {
-
+        // Parsing the line String
+        if (commandType.equals("todo")
+            || commandType.equals("deadline")
+            || commandType.equals("event")) {
+            
             description = commandBody;
-            // Handle /by
+
+            // Handle Deadline command containing /by
             int byIndex = commandBody.indexOf("/by");
             if (byIndex != -1) {
                 by = commandBody.substring(byIndex + 3).trim();
                 description = commandBody.substring(0, byIndex).trim();
             }
 
+            // Handle Event command containing /from /to
             int fromIndex = commandBody.indexOf("/from");
             int toIndex = commandBody.indexOf("/to");
 
@@ -171,18 +201,22 @@ public class TARS {
                 to = description.substring(toIndex + 3).trim();
                 description = description.substring(0, fromIndex).trim();
             }
+        }
 
-            switch (commandType) {
-            case "todo":
-                newTask = new Todo(description);
-                break;
-            case "deadline":
-                newTask = new Deadline(description, by);
-                break;
-            case "event":
-                newTask = new Event(description, to, from);
-                break;
-            }
+        // Return Task object based on commandType
+        switch (commandType) {
+        case "todo":
+            newTask = new Todo(description);
+            break;
+        case "deadline":
+            newTask = new Deadline(description, by);
+            break;
+        case "event":
+            newTask = new Event(description, to, from);
+            break;
+        default:
+            System.out.println("\tUnknown command type: " + commandType);
+            break;
         }
         return newTask;
     }

@@ -1,4 +1,4 @@
-public class Task {
+abstract class Task {
     protected String description;
     protected boolean isDone;
 
@@ -21,9 +21,7 @@ public class Task {
         this.isDone = isDone;
     }
 
-    public String getSymbol() {
-        return " ";
-    }
+    public abstract String getSymbol();
 
     @Override
     public String toString() {
