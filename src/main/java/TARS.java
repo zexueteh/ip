@@ -2,7 +2,7 @@ import java.util.Scanner;
 
 public class TARS {
     private static final String LINE_SEPERATOR = "\t____________________________________________________________";
-    private static final String WELCOME_MESSAGE = """
+    private static final String HELLO_MESSAGE = """
             \t  _____  _    ____  ____
             \t |_   _|/ \\  |  _ \\/ ___|
             \t   | | / _ \\ | |_) \\___ \\
@@ -12,7 +12,7 @@ public class TARS {
             \tHow can I help you today?""";
     public static final String GOODBYE_MESSAGE = "\tGoodnight Captain. Sleep well.";
     public static final String EMPTY_LINE_MESSAGE = "\tNegative Captain, your command is empty. Awaiting your command... ";
-    public static final String UNKNOWN_COMMAND_MESSAGE = "\tCaptain, I cannot comply. Unknown command detected.";
+
 
     private static int nTasks = 0;
     private static final int MAX_TASK = 100;
@@ -41,89 +41,132 @@ public class TARS {
 
         while (true) {
             line = sc.nextLine().strip();
-            CommandType commandType = parseCommandType(line);
 
+            try {
+                CommandType commandType = parseCommandType(line);
 
-            if (commandType == CommandType.BYE) {
-                break;
-            }
-
-            switch (commandType) {
-            case LIST:
-                printTaskList();
-                break;
-            case MARK:
-            case UNMARK:
-                int index = parseMarkCommand(line);
-                boolean isMarking = line.startsWith("mark");
-                markHandler(index, isMarking);
-                break;
-
-            case TODO:
-            case EVENT:
-            case DEADLINE:
-                Task newTask = taskParser(line, commandType);
-                if (newTask != null) {
-                    addTask(newTask);
+                if (commandType == CommandType.BYE) {
+                    break;
                 }
-                break;
 
-            case INVALID:
-            default:
-                System.out.println(LINE_SEPERATOR);
-                System.out.println(UNKNOWN_COMMAND_MESSAGE);
-                System.out.println(LINE_SEPERATOR);
+                String commandBody = parseCommandBody(line, commandType);
+
+            } catch (Exception e) {
+                printResponseMessage(e.getMessage());
             }
-        }
+
+            // to refactor into command handler function once input validation impelemented
+//            switch (commandType) {
+//            case LIST:
+//                printTaskList();
+//                break;
+//            case MARK:
+//            case UNMARK:
+//                int index = parseMarkCommand(line);
+//                boolean isMarking = line.startsWith("mark");
+//                markHandler(index, isMarking);
+//                break;
+//
+//            case TODO:
+//            case EVENT:
+//            case DEADLINE:
+//                Task newTask = taskParser(line, commandType);
+//                if (newTask != null) {
+//                    addTask(newTask);
+//                }
+//                break;
+//            default:
+//                break;
+
+            }
+
         printGoodbyeMessage();
         sc.close();
+    }
+
+    private static void printResponseMessage(String message) {
+        System.out.println(LINE_SEPERATOR);
+        System.out.println(message);
+        System.out.println(LINE_SEPERATOR);
     }
 
     /**
      * Prints the hello message to welcome the user.
      */
     private static void printHelloMessage() {
-        System.out.println(LINE_SEPERATOR);
-        System.out.println(WELCOME_MESSAGE);
-        System.out.println(LINE_SEPERATOR);
+        printResponseMessage(HELLO_MESSAGE);
     }
 
     /**
      * Prints the goodbye message before exiting.
      */
     private static void printGoodbyeMessage() {
-        System.out.println(LINE_SEPERATOR);
-        System.out.println(GOODBYE_MESSAGE);
-        System.out.println(LINE_SEPERATOR);
+        printResponseMessage(GOODBYE_MESSAGE);
     }
 
     /**
      * Parses user input line for commandType
+     * Validation throws exception for empty strings, returns CommandType.INVALID for unknown commands
      * @param line user input String as a command
      * @return first word in line as commandType
      */
-    private static CommandType parseCommandType(String line) {
-        try {
-            // Check for empty line
-            line = line.trim();
-            if (line.isEmpty()) {
-                throw new IndexOutOfBoundsException();
-            }
-
-            int commandEndIndex = line.indexOf(' ');
-            if (commandEndIndex == -1) {
-                commandEndIndex = line.length(); // case of single word commands e.g. list with no spaces
-            }
-
-            String commandString = line.substring(0, commandEndIndex);
-            return CommandType.fromString(commandString);
-        } catch (IndexOutOfBoundsException e) {
-            System.out.println(LINE_SEPERATOR);
-            System.out.println(EMPTY_LINE_MESSAGE);
-            System.out.println(LINE_SEPERATOR);
-            return CommandType.INVALID;
+    private static CommandType parseCommandType(String line) throws IndexOutOfBoundsException, IllegalArgumentException {
+        // Check for empty line
+        line = line.trim();
+        if (line.isEmpty()) {
+            throw new IndexOutOfBoundsException(EMPTY_LINE_MESSAGE);
         }
 
+        // Parse first word for CommandType
+        int commandEndIndex = line.indexOf(' ');
+        if (commandEndIndex == -1) {
+            commandEndIndex = line.length(); // case of single word commands e.g. list with no spaces
+        }
+
+        String commandString = line.substring(0, commandEndIndex);
+        return CommandType.fromString(commandString);
+    }
+
+    private static String parseCommandBody(String line, CommandType commandType)  throws TARSInvalidCommandBodyException {
+        int lineLength = line.length();
+        line = line.trim();
+
+        int commandStartIndex = line.indexOf(' ');
+        if (commandStartIndex == -1) {
+            commandStartIndex = line.length();
+        } else {
+            commandStartIndex = commandStartIndex + 1;
+        }
+
+        String commandBody = line.substring(commandStartIndex, lineLength);
+
+
+        switch (commandType) {
+        case LIST:
+            if (!commandBody.isEmpty()) {
+                throw new TARSInvalidCommandBodyException();
+            }
+            break;
+        case MARK:
+        case UNMARK:
+            int taskNumber;
+            try {
+                taskNumber = Integer.parseInt(commandBody);
+            } catch (NumberFormatException e) {
+                throw new TARSInvalidCommandBodyException();
+            }
+            if (taskNumber > nTasks) {
+                throw new TARSInvalidCommandBodyException();
+            }
+        case TODO:
+        case EVENT:
+        case DEADLINE:
+            // To be implemented
+            break;
+        default:
+            break;
+        }
+        return commandBody;
     }
 
 
