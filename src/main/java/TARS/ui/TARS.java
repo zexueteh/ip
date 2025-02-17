@@ -9,6 +9,7 @@ import TARS.command.TARSInvalidCommandBodyException;
 
 
 import java.util.Scanner;
+import java.util.ArrayList;
 
 public class TARS {
     private static final String LINE_SEPERATOR = "\t____________________________________________________________";
@@ -23,9 +24,7 @@ public class TARS {
     public static final String GOODBYE_MESSAGE = "\tGoodnight Captain. Sleep well.";
 
 
-    private static int nTasks = 0;
-    private static final int MAX_TASK = 100;
-    private static Task[] taskList = new Task[MAX_TASK];
+    private static ArrayList<Task> taskList = new ArrayList<Task>();
 
     /**
      * The main entry point into TARS Chatbot Application
@@ -163,7 +162,7 @@ public class TARS {
             } catch (NumberFormatException e) {
                 throw new TARSInvalidCommandBodyException("Invalid Argument: " + commandBody + ". Task number must be an integer.");
             }
-            if (taskNumber > nTasks || taskNumber < 1) {
+            if (taskNumber > taskList.size() || taskNumber < 1) {
                 throw new TARSInvalidCommandBodyException("Invalid Argument: " + taskNumber + ". Task number is out of range");
             }
             break;
@@ -254,14 +253,13 @@ public class TARS {
      */
     private static void addTask(Task newTask) {
 
-        taskList[nTasks] = newTask;
+        taskList.add(newTask);
 
         System.out.println(LINE_SEPERATOR);
         System.out.println("\tYes Captain. I've added this task.");
-        System.out.println("\t" + taskList[nTasks]);
+        System.out.println("\t" + taskList.get(taskList.size() - 1));
 
-        nTasks++;
-        System.out.println("\tThere are " + nTasks + " tasks in your list.");
+        System.out.println("\tThere are " + taskList.size() + " tasks in your list.");
         System.out.println(LINE_SEPERATOR);
 
     }
@@ -272,8 +270,8 @@ public class TARS {
     private static void printTaskList() {
         System.out.println(LINE_SEPERATOR);
         System.out.println("\tHere are the tasks in your list:");
-        for (int i = 0; i < nTasks; i++) {
-            System.out.println("    " + (i+1) + "." +taskList[i]);
+        for (int i = 0; i < taskList.size(); i++) {
+            System.out.println("    " + (i+1) + "." + taskList.get(i));
         }
         System.out.println(LINE_SEPERATOR);
     }
@@ -297,7 +295,7 @@ public class TARS {
      */
     private static void markHandler(int index, CommandType commandType) {
         boolean isMarking = commandType == CommandType.MARK;
-        taskList[index].setIsDone(isMarking);
+        taskList.get(index).setIsDone(isMarking);
 
         System.out.println(LINE_SEPERATOR);
         System.out.println(
@@ -305,7 +303,7 @@ public class TARS {
                 ? "\tTask Done. Good job Captain!"
                 : "\tOk, your task is marked as not done yet."
         );
-        System.out.println("\t" + taskList[index]);
+        System.out.println("\t" + taskList.get(index));
         System.out.println(LINE_SEPERATOR);
     }
 
