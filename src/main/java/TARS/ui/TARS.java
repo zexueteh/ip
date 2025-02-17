@@ -143,9 +143,9 @@ public class TARS {
         }
         commandBody = line.substring(commandStartIndex);
 
-        boolean hasBy = commandBody.toLowerCase().contains("by");
-        boolean hasFrom = commandBody.toLowerCase().contains("from");
-        boolean hasTo = commandBody.toLowerCase().contains("to");
+        boolean hasBy = commandBody.toLowerCase().contains("/by");
+        boolean hasFrom = commandBody.toLowerCase().contains("/from");
+        boolean hasTo = commandBody.toLowerCase().contains("/to");
 
         switch (commandType) {
         case LIST:
@@ -156,6 +156,7 @@ public class TARS {
 
         case MARK:
         case UNMARK:
+        case DELETE:
             int taskNumber;
             try {
                 taskNumber = Integer.parseInt(commandBody);
@@ -248,11 +249,10 @@ public class TARS {
 
 
     /**
-     * Appends new Task object to taskList array
+     * Appends new Task object to taskList ArrayList
      * @param newTask Task Object
      */
     private static void addTask(Task newTask) {
-
         taskList.add(newTask);
 
         System.out.println(LINE_SEPERATOR);
@@ -262,6 +262,21 @@ public class TARS {
         System.out.println("\tThere are " + taskList.size() + " tasks in your list.");
         System.out.println(LINE_SEPERATOR);
 
+    }
+
+    /**
+     * Deletes Task at index from ArrayList
+     * @param index index of object to be deleted
+     */
+    private static void deleteHandler(int index) {
+        System.out.println(LINE_SEPERATOR);
+        System.out.println("\tRoger Captain. I've deleted this task.");
+        System.out.println("\t" + taskList.get(index));
+
+        System.out.println("\tThere are " + (taskList.size()-1) + " tasks in your list.");
+        System.out.println(LINE_SEPERATOR);
+
+        taskList.remove(index);
     }
 
     /**
@@ -281,7 +296,7 @@ public class TARS {
      * @param line command read by scanner
      * @return 0-indexed integer corresponding to Task in taskList
      */
-    private static int parseMarkCommand(String line) {
+    private static int parseCommandIndex(String line) {
         int seperatorIndex = line.indexOf(" ") + 1;
         String indexString = line.substring(seperatorIndex);
 
@@ -369,8 +384,12 @@ public class TARS {
 
         case MARK:
         case UNMARK:
-            int index = parseMarkCommand(commandBody);
-            markHandler(index, commandType);
+
+            markHandler(parseCommandIndex(commandBody), commandType);
+            break;
+
+        case DELETE:
+            deleteHandler(parseCommandIndex(commandBody));
             break;
 
         case TODO:
