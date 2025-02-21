@@ -7,8 +7,11 @@ import TARS.command.CommandType;
 import TARS.command.TARSInvalidCommandBodyException;
 
 
-
+import java.io.IOException;
 import java.util.Scanner;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
 
 public class TARS {
     private static final String LINE_SEPERATOR = "\t____________________________________________________________";
@@ -26,6 +29,9 @@ public class TARS {
     private static int nTasks = 0;
     private static final int MAX_TASK = 100;
     private static Task[] taskList = new Task[MAX_TASK];
+
+    private static final String dataFolderPath = System.getProperty("user.dir") + "/data";
+    private static final String dataFilePath = dataFolderPath + "/tasks.txt";
 
     /**
      * The main entry point into TARS Chatbot Application
@@ -45,6 +51,12 @@ public class TARS {
      */
     public static void main(String[] args) {
         printHelloMessage();
+        String[] fileData = loadFile();
+        initializeTaskList(fileData);
+//        for (int i = 0; i < 4; i++) {
+//            System.out.println(fileData[i]);
+//        }
+
         String line;
         Scanner sc = new Scanner(System.in);
 
@@ -60,7 +72,7 @@ public class TARS {
 
                 String commandBody = parseCommandBody(line, commandType);
                 commandHandler(commandType, commandBody);
-
+                writeFile();
 
             } catch (Exception e) {
                 printResponseMessage(e.getMessage());
@@ -117,6 +129,7 @@ public class TARS {
 
 
     /**
+
      * parses commandBody for arguments from the user input after extracting command type
      * Validates the format of command body based on command type
      * Validation Rules
@@ -144,9 +157,9 @@ public class TARS {
         }
         commandBody = line.substring(commandStartIndex);
 
-        boolean hasBy = commandBody.toLowerCase().contains("by");
-        boolean hasFrom = commandBody.toLowerCase().contains("from");
-        boolean hasTo = commandBody.toLowerCase().contains("to");
+        boolean hasBy = commandBody.toLowerCase().contains("/by");
+        boolean hasFrom = commandBody.toLowerCase().contains("/from");
+        boolean hasTo = commandBody.toLowerCase().contains("/to");
 
         switch (commandType) {
         case LIST:
@@ -247,6 +260,143 @@ public class TARS {
         return commandBody;
     }
 
+    /**
+     * Ensures that data directory and data file exists
+     * If the data file or directory do not exist, they are created
+     *
+     * Exception handling: Handles IOExceptions and Security exceptions
+     */
+    private static void checkDataPathExists() {
+        File dataFolder = new File(dataFolderPath);
+        File dataFile = new File(dataFilePath);
+        try {
+            if (!dataFolder.exists()) {
+                dataFolder.mkdir();
+                dataFolder = new File(dataFolderPath);
+            }
+            if (!dataFile.exists()) {
+                dataFile.createNewFile();
+            }
+
+
+        } catch (SecurityException e) {
+            System.out.println("SecurityException: " + e.getMessage());
+        } catch (IOException e) {
+            System.out.println("IOException: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Reads task data from hardcoded file path, processes each line and stores in array
+     *
+     * Exception handling: FileNotFoundException if data file is missing/corrupted
+     * @return array of raw task data strings
+     */
+
+    private static String[] loadFile() {
+        String[] rawTaskData = new String[MAX_TASK];
+        checkDataPathExists();
+        File dataFile = new File(dataFilePath);
+
+        nTasks = 0;
+        String nextLine;
+
+        try {
+            Scanner fileScanner = new Scanner(dataFile);
+
+            while (fileScanner.hasNextLine()) {
+                nextLine = fileScanner.nextLine().trim();
+                if (nextLine.endsWith(")")) {
+                    nextLine = nextLine.substring(0, nextLine.length() - 1);
+                }
+
+                rawTaskData[nTasks] = nextLine;
+                nTasks++;
+            }
+
+        } catch (FileNotFoundException e) {
+            // file does not exist at the start
+            System.out.println("FileNotFoundException: " + e.getMessage());
+        }
+        return rawTaskData;
+    }
+
+    /**
+     * saves current taskList contents to a file
+     * writes the string representation of each Task object to a new line
+     *
+     * Error Handling: If IOException occurs, prints an error message
+     */
+    private static void writeFile() {
+        StringBuilder writeBuffer = new StringBuilder();
+        checkDataPathExists();
+
+
+        for (int i = 0; i < nTasks; i++) {
+            writeBuffer.append(taskList[i].toString()).append("\n");
+        }
+        try {
+            FileWriter dataWriter = new FileWriter(dataFilePath);
+            dataWriter.write(writeBuffer.toString());
+            dataWriter.close();
+        }
+        catch (IOException e) {
+            System.out.println("IOException: " + e.getMessage());
+
+        }
+
+    }
+
+    /**
+     * Initializes task list from previously stored data
+     * @param args Array of raw task data strings from storage file
+     */
+
+    private static void initializeTaskList(String[] args) {
+
+        for (int i = 0; i < nTasks; i++) {
+            String lineData = args[i];
+            CommandType commandType = parseLineTaskType(lineData);
+            Task newTask = getTask(lineData.substring(7), commandType, "(by:", "(from:", "to:");
+            boolean isDone = parseLineIsDone(lineData);
+            newTask.setIsDone(isDone);
+
+            taskList[i] = newTask;
+
+        }
+    }
+
+    /**
+     * parses line data from data.txt file to determine CommandType
+     * @param lineData raw task data string
+     * @return CommandType enum Todo, DeadLine, Event
+     */
+    private static CommandType parseLineTaskType(String lineData) {
+        char lineSymbol = lineData.charAt(1);
+        CommandType commandType = null;
+        switch (lineSymbol) {
+        case 'T':
+            commandType = CommandType.TODO;
+            break;
+        case 'D':
+            commandType = CommandType.DEADLINE;
+            break;
+        case 'E':
+            commandType = CommandType.EVENT;
+            break;
+        }
+        return commandType;
+    }
+
+    /**
+     * parses line data from data.txt file to determine if task is done
+     * @param lineData raw task data string
+     * @return whether task is done
+     */
+    private static boolean parseLineIsDone(String lineData) {
+        char doneIndicator = lineData.charAt(4);
+        return doneIndicator == 'X';
+    }
 
     /**
      * Appends new Task object to taskList array
@@ -315,9 +465,12 @@ public class TARS {
      * WARNING: only basic input validation implemented
      * @param commandBody user input String
      * @param commandType enum TARS.command.CommandType TODO, DEADLINE, EVENT
+     * @param byDelimiter String flag for by argument in command
+     * @param fromDelimiter String flag for from argument in command
+     * @param toDelimiter String flag for to argument in command
      * @return TARS.task.Todo, TARS.task.Deadline or TARS.task.Event Object
      */
-    private static Task getTask(String commandBody, CommandType commandType) {
+    private static Task getTask(String commandBody, CommandType commandType, String byDelimiter, String fromDelimiter, String toDelimiter) {
         Task newTask = null;
         String description = commandBody;
         String by  = null;
@@ -329,17 +482,17 @@ public class TARS {
 
         switch (commandType) {
         case DEADLINE: // Handle TARS.task.Deadline command containing /by
-            int byIndex = commandBody.toLowerCase().indexOf("/by");
-            by = commandBody.substring(byIndex + 3).trim();
+            int byIndex = commandBody.toLowerCase().indexOf(byDelimiter);
+            by = commandBody.substring(byIndex + byDelimiter.length()).trim();
             description = commandBody.substring(0, byIndex).trim();
             break;
 
         case EVENT: // Handle TARS.task.Event command containing /from /to
-            int fromIndex = commandBody.toLowerCase().indexOf("/from");
-            int toIndex = commandBody.toLowerCase().indexOf("/to");
+            int fromIndex = commandBody.toLowerCase().indexOf(fromDelimiter);
+            int toIndex = commandBody.toLowerCase().indexOf(toDelimiter);
 
-            from = description.substring(fromIndex + 5, toIndex).trim();
-            to = description.substring(toIndex + 3).trim();
+            from = description.substring(fromIndex + fromDelimiter.length(), toIndex).trim();
+            to = description.substring(toIndex + toDelimiter.length()).trim();
             description = description.substring(0, fromIndex).trim();
         }
 
@@ -378,7 +531,7 @@ public class TARS {
         case TODO:
         case EVENT:
         case DEADLINE:
-            Task newTask = getTask(commandBody, commandType);
+            Task newTask = getTask(commandBody, commandType, "/by", "/from", "/to");
             addTask(newTask);
             break;
 
