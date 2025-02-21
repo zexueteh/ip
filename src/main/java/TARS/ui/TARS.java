@@ -9,6 +9,7 @@ import TARS.command.TARSInvalidCommandBodyException;
 
 import java.io.IOException;
 import java.util.Scanner;
+import java.util.ArrayList;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
@@ -26,9 +27,7 @@ public class TARS {
     public static final String GOODBYE_MESSAGE = "\tGoodnight Captain. Sleep well.";
 
 
-    private static int nTasks = 0;
-    private static final int MAX_TASK = 100;
-    private static Task[] taskList = new Task[MAX_TASK];
+    private static ArrayList<Task> taskList = new ArrayList<Task>();
 
     private static final String dataFolderPath = System.getProperty("user.dir") + "/data";
     private static final String dataFilePath = dataFolderPath + "/tasks.txt";
@@ -51,7 +50,7 @@ public class TARS {
      */
     public static void main(String[] args) {
         printHelloMessage();
-        String[] fileData = loadFile();
+        ArrayList<String> fileData = loadFile();
         initializeTaskList(fileData);
 //        for (int i = 0; i < 4; i++) {
 //            System.out.println(fileData[i]);
@@ -170,13 +169,14 @@ public class TARS {
 
         case MARK:
         case UNMARK:
+        case DELETE:
             int taskNumber;
             try {
                 taskNumber = Integer.parseInt(commandBody);
             } catch (NumberFormatException e) {
                 throw new TARSInvalidCommandBodyException("Invalid Argument: " + commandBody + ". Task number must be an integer.");
             }
-            if (taskNumber > nTasks || taskNumber < 1) {
+            if (taskNumber > taskList.size() || taskNumber < 1) {
                 throw new TARSInvalidCommandBodyException("Invalid Argument: " + taskNumber + ". Task number is out of range");
             }
             break;
@@ -293,12 +293,11 @@ public class TARS {
      * @return array of raw task data strings
      */
 
-    private static String[] loadFile() {
-        String[] rawTaskData = new String[MAX_TASK];
+    private static ArrayList<String> loadFile() {
+        ArrayList<String> rawTaskData = new ArrayList<String>();
         checkDataPathExists();
         File dataFile = new File(dataFilePath);
 
-        nTasks = 0;
         String nextLine;
 
         try {
@@ -310,8 +309,7 @@ public class TARS {
                     nextLine = nextLine.substring(0, nextLine.length() - 1);
                 }
 
-                rawTaskData[nTasks] = nextLine;
-                nTasks++;
+                rawTaskData.add(nextLine);
             }
 
         } catch (FileNotFoundException e) {
@@ -332,8 +330,8 @@ public class TARS {
         checkDataPathExists();
 
 
-        for (int i = 0; i < nTasks; i++) {
-            writeBuffer.append(taskList[i].toString()).append("\n");
+        for (int i = 0; i < taskList.size(); i++) {
+            writeBuffer.append(taskList.get(i).toString()).append("\n");
         }
         try {
             FileWriter dataWriter = new FileWriter(dataFilePath);
@@ -352,16 +350,16 @@ public class TARS {
      * @param args Array of raw task data strings from storage file
      */
 
-    private static void initializeTaskList(String[] args) {
+    private static void initializeTaskList(ArrayList<String> args) {
 
-        for (int i = 0; i < nTasks; i++) {
-            String lineData = args[i];
+        for (int i = 0; i < args.size(); i++) {
+            String lineData = args.get(i);
             CommandType commandType = parseLineTaskType(lineData);
             Task newTask = getTask(lineData.substring(7), commandType, "(by:", "(from:", "to:");
             boolean isDone = parseLineIsDone(lineData);
             newTask.setIsDone(isDone);
 
-            taskList[i] = newTask;
+            taskList.add(newTask);
 
         }
     }
@@ -399,21 +397,34 @@ public class TARS {
     }
 
     /**
-     * Appends new Task object to taskList array
+     * Appends new Task object to taskList ArrayList
      * @param newTask Task Object
      */
     private static void addTask(Task newTask) {
-
-        taskList[nTasks] = newTask;
+        taskList.add(newTask);
 
         System.out.println(LINE_SEPERATOR);
         System.out.println("\tYes Captain. I've added this task.");
-        System.out.println("\t" + taskList[nTasks]);
+        System.out.println("\t" + taskList.get(taskList.size() - 1));
 
-        nTasks++;
-        System.out.println("\tThere are " + nTasks + " tasks in your list.");
+        System.out.println("\tThere are " + taskList.size() + " tasks in your list.");
         System.out.println(LINE_SEPERATOR);
 
+    }
+
+    /**
+     * Deletes Task at index from ArrayList
+     * @param index index of object to be deleted
+     */
+    private static void deleteHandler(int index) {
+        System.out.println(LINE_SEPERATOR);
+        System.out.println("\tRoger Captain. I've deleted this task.");
+        System.out.println("\t" + taskList.get(index));
+
+        System.out.println("\tThere are " + (taskList.size()-1) + " tasks in your list.");
+        System.out.println(LINE_SEPERATOR);
+
+        taskList.remove(index);
     }
 
     /**
@@ -422,8 +433,8 @@ public class TARS {
     private static void printTaskList() {
         System.out.println(LINE_SEPERATOR);
         System.out.println("\tHere are the tasks in your list:");
-        for (int i = 0; i < nTasks; i++) {
-            System.out.println("    " + (i+1) + "." +taskList[i]);
+        for (int i = 0; i < taskList.size(); i++) {
+            System.out.println("    " + (i+1) + "." + taskList.get(i));
         }
         System.out.println(LINE_SEPERATOR);
     }
@@ -433,7 +444,7 @@ public class TARS {
      * @param line command read by scanner
      * @return 0-indexed integer corresponding to Task in taskList
      */
-    private static int parseMarkCommand(String line) {
+    private static int parseCommandIndex(String line) {
         int seperatorIndex = line.indexOf(" ") + 1;
         String indexString = line.substring(seperatorIndex);
 
@@ -447,7 +458,7 @@ public class TARS {
      */
     private static void markHandler(int index, CommandType commandType) {
         boolean isMarking = commandType == CommandType.MARK;
-        taskList[index].setIsDone(isMarking);
+        taskList.get(index).setIsDone(isMarking);
 
         System.out.println(LINE_SEPERATOR);
         System.out.println(
@@ -455,7 +466,7 @@ public class TARS {
                 ? "\tTask Done. Good job Captain!"
                 : "\tOk, your task is marked as not done yet."
         );
-        System.out.println("\t" + taskList[index]);
+        System.out.println("\t" + taskList.get(index));
         System.out.println(LINE_SEPERATOR);
     }
 
@@ -524,8 +535,12 @@ public class TARS {
 
         case MARK:
         case UNMARK:
-            int index = parseMarkCommand(commandBody);
-            markHandler(index, commandType);
+
+            markHandler(parseCommandIndex(commandBody), commandType);
+            break;
+
+        case DELETE:
+            deleteHandler(parseCommandIndex(commandBody));
             break;
 
         case TODO:
