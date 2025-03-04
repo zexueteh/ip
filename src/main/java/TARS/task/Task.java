@@ -3,9 +3,11 @@ package TARS.task;
 public abstract class Task {
     protected String description;
     protected boolean isDone;
+    protected TaskType type;
 
-    public Task(String description) {
+    public Task(TaskType type, String description) {
         this.description = description;
+        this.type = type;
         this.isDone = false;
     }
 
@@ -23,11 +25,10 @@ public abstract class Task {
         this.isDone = isDone;
     }
 
-    public abstract String getSymbol();
 
     @Override
     public String toString() {
-        return "[" + getSymbol() + "][" + (this.isDone ? "X" : " ") + "] " + this.description;
+        return "[" + type + "][" + (this.isDone ? "X" : " ") + "] " + this.description;
     }
 
 }

@@ -68,22 +68,22 @@ Invalid Argument: 0. Task number is out of range
 Invalid Argument: abc. Task number must be an integer.
 	____________________________________________________________
 	____________________________________________________________
-Invalid Argument: TARS.command.CommandType TODO has empty description.
+Invalid Argument: TARS.logic.CommandType TODO has empty description.
 	____________________________________________________________
 	____________________________________________________________
-Invalid Argument: TARS.command.CommandType DEADLINE has empty description.
+Invalid Argument: TARS.logic.CommandType DEADLINE has empty description.
 	____________________________________________________________
 	____________________________________________________________
-Invalid Flags: TARS.command.CommandType EVENT must contain /from and /to flags.
+Invalid Flags: TARS.logic.CommandType EVENT must contain /from and /to flags.
 	____________________________________________________________
 	____________________________________________________________
-Invalid Flags: TARS.command.CommandType EVENT must contain /from and /to flags.
+Invalid Flags: TARS.logic.CommandType EVENT must contain /from and /to flags.
 	____________________________________________________________
 	____________________________________________________________
-Invalid Argument: TARS.command.CommandType EVENT has empty start/end time.
+Invalid Argument: TARS.logic.CommandType EVENT has empty start/end time.
 	____________________________________________________________
 	____________________________________________________________
-Invalid Flags: TARS.command.CommandType DEADLINE must contain /by flag.
+Invalid Flags: TARS.logic.CommandType DEADLINE must contain /by flag.
 	____________________________________________________________
 	____________________________________________________________
 Invalid Command: unknowncommand. Command not recognized. Use 'help' for valid commands.

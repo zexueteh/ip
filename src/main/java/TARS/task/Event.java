@@ -4,11 +4,15 @@ public class Event extends Task {
     protected String from;
     protected String to;
 
-    public Event(String description, String from, String to){
-        super(description);
+    public Event(TaskType type, String description, String from, String to){
+        super(type, description);
         this.from = from;
         this.to = to;
     }
+    public Event(TaskType type, String description) {
+        this(type, description, "", "");
+    }
+
 
     public String getFrom(){
         return from;
@@ -24,10 +28,6 @@ public class Event extends Task {
         this.to = to;
     }
 
-    @Override
-    public String getSymbol() {
-        return "E";
-    }
 
     @Override
     public String toString() {

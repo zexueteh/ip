@@ -3,9 +3,13 @@ package TARS.task;
 public class Deadline extends Task {
     protected String by;
 
-    public Deadline(String description, String by) {
-        super(description);
+    public Deadline(TaskType type, String description, String by) {
+        super(type, description);
         this.by = by;
+    }
+
+    public Deadline(TaskType type, String description) {
+        this(type, description, "");
     }
 
     public String getBy() {
@@ -13,11 +17,6 @@ public class Deadline extends Task {
     }
     public void setBy(String by) {
         this.by = by;
-    }
-
-    @Override
-    public String getSymbol() {
-        return "D";
     }
 
     @Override

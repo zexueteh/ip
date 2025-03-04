@@ -2,12 +2,8 @@ package TARS.task;
 
 public class Todo extends Task {
 
-    public Todo(String Description) {
-        super(Description);
+    public Todo(TaskType type,  String Description) {
+        super(type, Description);
     }
 
-    @Override
-    public String getSymbol() {
-        return "T";
-    }
 }
