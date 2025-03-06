@@ -1,22 +1,22 @@
-todo read book
-mark 1
-deadline return book /by June 6th
-event project meeting /from Aug 6th 2pm /to 4pm
-todo join sports club
-mark 4
-todo borrow book
-list
-deadline return book /by Sunday
-event project meeting /from Mon 2pm /to 4pm
-mark 10
-unmark 0
-mark abc
-todo
-deadline /by Monday
-event meeting /to 5pm
-event meeting /from 2pm
-event meeting /from /to
-deadline return book
-unknowncommand
+/todo read book
+/mark 1
+/deadline return book /by June 6th
+/event project meeting /from Aug 6th 2pm /to 4pm
+/todo join sports club
+/mark 4
+/todo borrow book
+/list
+/deadline return book /by Sunday
+/event project meeting /from Mon 2pm /to 4pm
+/mark 10
+/unmark 0
+/mark abc
+/todo
+/deadline /by Monday
+/event meeting /to 5pm
+/event meeting /from 2pm
+/event meeting /from /to
+/deadline return book
+/unknowncommand
 
-bye
+/bye

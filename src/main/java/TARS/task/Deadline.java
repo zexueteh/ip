@@ -3,13 +3,13 @@ package TARS.task;
 public class Deadline extends Task {
     protected String by;
 
-    public Deadline(TaskType type, String description, String by) {
-        super(type, description);
+    public Deadline(TaskType type, String description, boolean isDone, String by) {
+        super(type, description, isDone);
         this.by = by;
     }
 
-    public Deadline(TaskType type, String description) {
-        this(type, description, "");
+    public Deadline(TaskType type, String description, String by) {
+        this(type, description, false, "");
     }
 
     public String getBy() {

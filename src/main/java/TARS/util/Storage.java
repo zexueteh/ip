@@ -12,6 +12,7 @@ import java.io.FileNotFoundException;
 public class Storage {
     private static Storage instance = null;
     private static File dataFile;
+    private static String dataFilePath;
 
     /**
      * On initialisation, check if data directory and file exists.
@@ -23,7 +24,8 @@ public class Storage {
      */
     private Storage(String dataFolderPath, String dataFilePath) throws TARSStorageFilePathException {
         File dataFolder = new File(dataFolderPath);
-        dataFile = new File(dataFilePath);
+        Storage.dataFile = new File(dataFilePath);
+        Storage.dataFilePath = dataFilePath;
         try {
             if (!dataFolder.exists()) {
                 dataFolder.mkdir();
@@ -67,6 +69,16 @@ public class Storage {
         return instance;
     }
 
+    public static void write(String data) throws TARSStorageOperationException {
+        try {
+            FileWriter fileWriter = new FileWriter(dataFilePath);
+            fileWriter.write(data);
+            fileWriter.close();
+        } catch (IOException e) {
+            throw new TARSStorageOperationException(e.getMessage());
+        }
+    }
+
     /* Use of Nested Exception classes
      */
 
@@ -75,7 +87,7 @@ public class Storage {
      */
     public static class TARSStorageFilePathException extends Exception {
         public TARSStorageFilePathException(String message) {
-            super(message);
+            super("File Path Error: " + message);
         }
     }
 
@@ -84,7 +96,7 @@ public class Storage {
      */
     public static class TARSStorageOperationException extends Exception {
         public TARSStorageOperationException(String message) {
-            super(message);
+            super("Read Write Error: " + message);
         }
     }
 

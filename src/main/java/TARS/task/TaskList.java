@@ -14,7 +14,30 @@ public class TaskList {
             Task newTask = Parser.parseFileLine(taskData);
             taskList.add(newTask);
         }
-
     }
 
+    public int length() {
+        return taskList.size();
+    }
+
+    public Task getTask(int index) {
+        return taskList.get(index);
+    }
+
+    public void add(Task newTask) {
+        taskList.add(newTask);
+    }
+
+    public void remove(int index) {
+        taskList.remove(index);
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        for (Task task : taskList) {
+            sb.append(task.toString()).append("\n");
+        }
+        return sb.toString().trim();
+    }
 }

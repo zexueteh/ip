@@ -5,10 +5,14 @@ public abstract class Task {
     protected boolean isDone;
     protected TaskType type;
 
-    public Task(TaskType type, String description) {
-        this.description = description;
+    public Task(TaskType type, String description, boolean isDone) {
         this.type = type;
-        this.isDone = false;
+        this.description = description;
+        this.isDone = isDone;
+    }
+
+    public Task(TaskType type, String description) {
+        this(type, description, false);
     }
 
     public String getDescription() {

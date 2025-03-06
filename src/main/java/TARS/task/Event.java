@@ -4,15 +4,14 @@ public class Event extends Task {
     protected String from;
     protected String to;
 
-    public Event(TaskType type, String description, String from, String to){
-        super(type, description);
+    public Event(TaskType type, String description, boolean isDone, String from, String to){
+        super(type, description, isDone);
         this.from = from;
         this.to = to;
     }
-    public Event(TaskType type, String description) {
-        this(type, description, "", "");
+    public Event(TaskType type, String description, String from, String to) {
+        this(type, description, false, from, to);
     }
-
 
     public String getFrom(){
         return from;

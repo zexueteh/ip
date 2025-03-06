@@ -1,17 +1,17 @@
 package TARS.task;
 
-import TARS.logic.CommandType;
+import java.util.Locale;
 
 public enum TaskType {
     TODO, DEADLINE, EVENT, INVALID;
 
     public static TaskType fromString(String command) throws IllegalArgumentException {
-        switch (command) {
-        case "T":
+        switch (command.toUpperCase()) {
+        case "T", "TODO":
             return TaskType.TODO;
-        case "D":
+        case "D", "DEADLINE":
             return TaskType.DEADLINE;
-        case "E":
+        case "E", "EVENT":
             return TaskType.EVENT;
         default:
             return TaskType.INVALID;

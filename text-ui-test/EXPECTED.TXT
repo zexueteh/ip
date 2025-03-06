@@ -1,4 +1,3 @@
-	____________________________________________________________
 	  _____  _    ____  ____
 	 |_   _|/ \  |  _ \/ ___|
 	   | | / _ \ | |_) \___ \
@@ -7,89 +6,88 @@
 	Hello, I'm TARS, your friendly chatbot assistant.
 	How can I help you today?
 	____________________________________________________________
-	____________________________________________________________
-	Yes Captain. I've added this task.
+	Yes Captain. I've added the following task:
 	[T][ ] read book
-	There are 1 tasks in your list.
+	There are now 1 tasks in your list.
 	____________________________________________________________
 	____________________________________________________________
 	Task Done. Good job Captain!
 	[T][X] read book
 	____________________________________________________________
 	____________________________________________________________
-	Yes Captain. I've added this task.
+	Yes Captain. I've added the following task:
 	[D][ ] return book (by: June 6th)
-	There are 2 tasks in your list.
+	There are now 2 tasks in your list.
 	____________________________________________________________
 	____________________________________________________________
-	Yes Captain. I've added this task.
+	Yes Captain. I've added the following task:
 	[E][ ] project meeting (from: Aug 6th 2pm to: 4pm)
-	There are 3 tasks in your list.
+	There are now 3 tasks in your list.
 	____________________________________________________________
 	____________________________________________________________
-	Yes Captain. I've added this task.
+	Yes Captain. I've added the following task:
 	[T][ ] join sports club
-	There are 4 tasks in your list.
+	There are now 4 tasks in your list.
 	____________________________________________________________
 	____________________________________________________________
 	Task Done. Good job Captain!
 	[T][X] join sports club
 	____________________________________________________________
 	____________________________________________________________
-	Yes Captain. I've added this task.
+	Yes Captain. I've added the following task:
 	[T][ ] borrow book
-	There are 5 tasks in your list.
+	There are now 5 tasks in your list.
 	____________________________________________________________
 	____________________________________________________________
-	Here are the tasks in your list:
-    1.[T][X] read book
-    2.[D][ ] return book (by: June 6th)
-    3.[E][ ] project meeting (from: Aug 6th 2pm to: 4pm)
-    4.[T][X] join sports club
-    5.[T][ ] borrow book
+	You have 5 task(s) in your list:
+	1.[T][X] read book
+	2.[D][ ] return book (by: June 6th)
+	3.[E][ ] project meeting (from: Aug 6th 2pm to: 4pm)
+	4.[T][X] join sports club
+	5.[T][ ] borrow book
 	____________________________________________________________
 	____________________________________________________________
-	Yes Captain. I've added this task.
+	Yes Captain. I've added the following task:
 	[D][ ] return book (by: Sunday)
-	There are 6 tasks in your list.
+	There are now 6 tasks in your list.
 	____________________________________________________________
 	____________________________________________________________
-	Yes Captain. I've added this task.
+	Yes Captain. I've added the following task:
 	[E][ ] project meeting (from: Mon 2pm to: 4pm)
-	There are 7 tasks in your list.
+	There are now 7 tasks in your list.
 	____________________________________________________________
 	____________________________________________________________
-Invalid Argument: 10. Task number is out of range
+Invalid Command Parameters: index: 10 has to be less than or equal to 7.
 	____________________________________________________________
 	____________________________________________________________
-Invalid Argument: 0. Task number is out of range
+Invalid Command Parameters: index: 0 has to be greater than 0.
 	____________________________________________________________
 	____________________________________________________________
-Invalid Argument: abc. Task number must be an integer.
+Invalid Command Parameters: Index: "abc" is invalid. /mark command requires an integer index.
 	____________________________________________________________
 	____________________________________________________________
-Invalid Argument: TARS.logic.CommandType TODO has empty description.
+Invalid Command Parameters: /todo command requires a description parameter.
 	____________________________________________________________
 	____________________________________________________________
-Invalid Argument: TARS.logic.CommandType DEADLINE has empty description.
+Invalid Command Parameters: /deadline command requires a description parameter.
 	____________________________________________________________
 	____________________________________________________________
-Invalid Flags: TARS.logic.CommandType EVENT must contain /from and /to flags.
+Invalid Command Parameters: /event command requires description, from, to parameters.
 	____________________________________________________________
 	____________________________________________________________
-Invalid Flags: TARS.logic.CommandType EVENT must contain /from and /to flags.
+Invalid Command Parameters: /event command requires description, from, to parameters.
 	____________________________________________________________
 	____________________________________________________________
-Invalid Argument: TARS.logic.CommandType EVENT has empty start/end time.
+Invalid Command Parameters: /event command requires a from parameter.
 	____________________________________________________________
 	____________________________________________________________
-Invalid Flags: TARS.logic.CommandType DEADLINE must contain /by flag.
+Invalid Command Parameters: /deadline command requires description, deadline parameters.
 	____________________________________________________________
 	____________________________________________________________
-Invalid Command: unknowncommand. Command not recognized. Use 'help' for valid commands.
+Invalid Command Type: "unknowncommand" is an invalid command.
 	____________________________________________________________
 	____________________________________________________________
-Invalid Command: . Command cannot be empty. Use 'help' for valid commands.
+Invalid Command Type: no commandType found
 	____________________________________________________________
 	____________________________________________________________
 	Goodnight Captain. Sleep well.

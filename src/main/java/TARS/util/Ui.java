@@ -44,12 +44,14 @@ public class Ui {
     }
 
     /**
-     * General Printing wrapper function that prints divider line before/after the output text
+     * General Printing function, prints output text with prefix buffer.
      * @param message text to be output in the console
      */
     public void printResponseMessage(String message) {
-        out.println(LINE_DIVIDER);
         out.println(LINE_PREFIX + message);
+    }
+
+    public void printLineDivider() {
         out.println(LINE_DIVIDER);
     }
 
@@ -63,7 +65,7 @@ public class Ui {
     /**
      * Prints the goodbye message before exiting.
      */
-    private void printGoodbyeMessage() {
+    public void printGoodbyeMessage() {
         printResponseMessage(GOODBYE_MESSAGE);
     }
 
