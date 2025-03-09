@@ -1,7 +1,6 @@
 package TARS.logic;
 
 import TARS.command.CommandType;
-
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -47,7 +46,7 @@ public class Validator extends Parser {
     }
 
     private static void validateCommandType(String input) throws TARSInvalidCommandType {
-        Matcher matcher = commandTypePattern.matcher(input);
+        Matcher matcher = RegexConstants.COMMAND_TYPE_PATTERN.matcher(input);
 
         if (matcher.matches()) {
             String typeString = matcher.group("commandType").trim();
@@ -77,19 +76,22 @@ public class Validator extends Parser {
         case EVENT:
             validateEventCommand(input, type);
             break;
+        case FIND:
+            validateFindCommand(input, type);
+            break;
         }
     }
 
     private static void validateByeListCommand(String input, CommandType type)
             throws TARSInvalidCommandParam {
-        if (!input.matches(validateByeListRegex)) {
+        if (!input.matches(RegexConstants.VALIDATE_BYE_LIST_REGEX)) {
             throw new TARSInvalidCommandParam("/" + type + " command has no parameters.");
         }
     }
 
     private static void validateMarkUnmarkDeleteCommand(String input, CommandType type)
             throws TARSInvalidCommandParam {
-        Matcher matcher = validateMarkUnmarkDeletePattern.matcher(input);
+        Matcher matcher = RegexConstants.VALIDATE_MARK_UNMARK_DELETE_PATTERN.matcher(input);
         if (matcher.matches()) {
             String index = matcher.group("index");
             if (index == null) {
@@ -107,19 +109,25 @@ public class Validator extends Parser {
     }
 
     private static void validateTodoCommand(String input, CommandType type) throws TARSInvalidCommandParam {
-        Matcher matcher = validateTodoPattern.matcher(input);
+        Matcher matcher = RegexConstants.VALIDATE_TODO_PATTERN.matcher(input);
         String[] params = {"description"};
         validateObjectParams(type, params, matcher);
     }
 
     private static void validateDeadlineCommand(String input, CommandType type) throws TARSInvalidCommandParam {
-        Matcher matcher = validateDeadlinePattern.matcher(input);
+        Matcher matcher = RegexConstants.VALIDATE_DEADLINE_PATTERN.matcher(input);
         String[] params = {"description","deadline"};
         validateObjectParams(type, params, matcher);
     }
     private static void validateEventCommand(String input, CommandType type) throws TARSInvalidCommandParam {
-        Matcher matcher = validateEventPattern.matcher(input);
+        Matcher matcher = RegexConstants.VALIDATE_EVENT_PATTERN.matcher(input);
         String[] params = {"description","from","to"};
+        validateObjectParams(type, params, matcher);
+    }
+
+    private static void validateFindCommand(String input, CommandType type) throws TARSInvalidCommandParam {
+        Matcher matcher = RegexConstants.VALIDATE_FIND_PATTERN.matcher(input);
+        String[] params = {"searchTerm"};
         validateObjectParams(type, params, matcher);
     }
 
