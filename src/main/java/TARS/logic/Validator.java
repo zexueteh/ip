@@ -7,6 +7,9 @@ import java.util.regex.Pattern;
 
 import static TARS.command.CommandType.*;
 
+/**
+ * Validates user input commands before parsing
+ */
 public class Validator extends Parser {
     private static final String validateByeListRegex = String.format(
             "(?i)^/(?<commandType>%s|%s)$",
@@ -30,6 +33,13 @@ public class Validator extends Parser {
             + "\\s+/to(?:\\s+(?<to>.+?))?", EVENT);
     private static final Pattern validateEventPattern = Pattern.compile(validateEventRegex);
 
+    /**
+     * Validates the user input command before parsing.
+     *
+     * @param input The user command.
+     * @throws TARSInvalidCommandType If the command type is invalid.
+     * @throws TARSInvalidCommandParam If command parameters are incorrect.
+     */
     public static void validate(String input) throws TARSInvalidCommandType, TARSInvalidCommandParam {
         validateCommandType(input);
         CommandType type = parseCommandType(input);
@@ -129,6 +139,13 @@ public class Validator extends Parser {
         }
     }
 
+    /**
+     * Validates that the index parameter is within a valid range.
+     *
+     * @param numberTasks The total number of tasks.
+     * @param index The index to validate.
+     * @throws TARSInvalidCommandParam If the index is out of range.
+     */
     public static void validateIndexParam(int numberTasks, int index) throws TARSInvalidCommandParam {
         if (index <= 0) {
             throw new TARSInvalidCommandParam("index: " + index + " has to be greater than 0.");

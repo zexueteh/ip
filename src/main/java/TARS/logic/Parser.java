@@ -7,7 +7,9 @@ import static TARS.command.CommandType.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-
+/**
+ * Handles parsing of user input and file data.
+ */
 public class Parser {
     private static final String fileLineRegex = "^\\[(?<taskType>T|D|E)\\]"
             + "\\[\\s?(?<status>X?)\\]"
@@ -28,7 +30,15 @@ public class Parser {
 
     protected static final Pattern commandPattern = Pattern.compile(commandRegex);
 
-
+    /**
+     * Parses a user command and returns the corresponding {@code Command} object.
+     *
+     * @param line The user input string.
+     * @return A {@code Command} object representing the parsed command.
+     * @throws TARSParserTaskReadException If parsing fails when reading from storage file.
+     * @throws Validator.TARSInvalidCommandType If an invalid command type is provided by user input.
+     * @throws Validator.TARSInvalidCommandParam If command parameters in user input are invalid.
+     */
     public static Command parseCommand(String line)
             throws TARSParserTaskReadException,
             Validator.TARSInvalidCommandType,
@@ -49,13 +59,16 @@ public class Parser {
             return new AddCommand(newTask);
         case DELETE:
             return new DeleteCommand(parseIndex(line,commandPattern));
-
         }
-
-
         return null;
     }
 
+    /**
+     * Parses the command type from a given user input string.
+     *
+     * @param line The input string.
+     * @return The corresponding {@code CommandType}.
+     */
     protected static CommandType parseCommandType(String line) {
         Matcher matcher = commandTypePattern.matcher(line);
         CommandType commandType = null;
@@ -63,14 +76,27 @@ public class Parser {
             String commandTypeString = matcher.group("commandType");
             commandType = fromString(commandTypeString);
         }
-
         return commandType;
     }
 
+    /**
+     * Parses a task from a file line.
+     *
+     * @param line A line from the stored file.
+     * @return The parsed {@code Task} object.
+     * @throws TARSParserTaskReadException If parsing fails.
+     */
     public static Task parseFileLine(String line) throws TARSParserTaskReadException {
         return parseTask(line, fileLinePattern);
     }
 
+    /**
+     * Extracts the task index from a user input string.
+     *
+     * @param line The input string.
+     * @param pattern The regex pattern used for extraction.
+     * @return The extracted index.
+     */
     private static int parseIndex(String line, Pattern pattern) {
         int index = -1;
         Matcher matcher = pattern.matcher(line);
@@ -80,6 +106,14 @@ public class Parser {
         return index;
     }
 
+    /**
+     * Parses a task from a given input string.
+     *
+     * @param line The input string.
+     * @param pattern The regex pattern used for parsing.
+     * @return A {@code Task} object representing the parsed task.
+     * @throws TARSParserTaskReadException If parsing fails.
+     */
     private static Task parseTask(String line, Pattern pattern) throws TARSParserTaskReadException {
         TaskType taskType;
         boolean isDone;
