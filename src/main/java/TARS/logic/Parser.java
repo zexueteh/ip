@@ -75,15 +75,20 @@ public class Parser {
 
         if (matcher.matches()) {
             taskType = TaskType.fromString(matcher.group("taskType"));
-            if (pattern.pattern().contains("?<status>")) {
-                isDone = matcher.group("status").equals("X");
-            } else {
-                isDone = false;
-            }
             description = matcher.group("description");
             by = matcher.group("by");
             from = matcher.group("from");
             to = matcher.group("to");
+
+            if (pattern == RegexConstants.COMMAND_PATTERN) {
+                isDone = matcher.group("status").equals("X");
+                by = DateTimeParser.parseParam(by);
+                from = DateTimeParser.parseParam(from);
+                to = DateTimeParser.parseParam(to);
+            } else {
+                isDone = false;
+            }
+
 
         } else {
             throw new TARSParserTaskReadException("File Load Error: Unable to parse task type.");
