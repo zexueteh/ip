@@ -1,7 +1,7 @@
 package TARS.command;
 
 public enum CommandType {
-    BYE, LIST, MARK, UNMARK, TODO, DEADLINE, EVENT, DELETE, INVALID;
+    BYE, LIST, MARK, UNMARK, TODO, DEADLINE, EVENT, DELETE, FIND, INVALID;
 
     public static CommandType fromString(String command) {
         try {

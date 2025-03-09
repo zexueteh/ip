@@ -1,12 +1,6 @@
 package TARS.logic;
 
-import TARS.command.Command;
-import TARS.command.CommandType;
-import TARS.command.AddCommand;
-import TARS.command.DeleteCommand;
-import TARS.command.MarkCommand;
-import TARS.command.ByeCommand;
-import TARS.command.ListCommand;
+import TARS.command.*;
 
 import TARS.task.Task;
 import TARS.task.Todo;
@@ -39,6 +33,9 @@ public class Parser {
             return new AddCommand(newTask);
         case DELETE:
             return new DeleteCommand(parseIndex(line));
+        case FIND:
+            String searchTerm = parseSearchTerm(line);
+            return new FindCommand(searchTerm);
         }
         return null;
     }
@@ -65,6 +62,15 @@ public class Parser {
             index = Integer.parseInt(matcher.group("index"));
         }
         return index;
+    }
+
+    private static String parseSearchTerm(String line) {
+        String searchTerm = "";
+        Matcher matcher = RegexConstants.COMMAND_PATTERN.matcher(line);
+        if (matcher.matches()) {
+            searchTerm = matcher.group("description");
+        }
+        return searchTerm;
     }
 
     private static Task parseTask(String line, Pattern pattern) throws TARSParserTaskReadException {
