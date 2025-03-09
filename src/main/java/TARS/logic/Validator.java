@@ -1,34 +1,11 @@
 package TARS.logic;
 
 import TARS.command.CommandType;
-
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-import static TARS.command.CommandType.*;
+import static TARS.logic.Parser.parseCommandType;
 
-public class Validator extends Parser {
-    private static final String validateByeListRegex = String.format(
-            "(?i)^/(?<commandType>%s|%s)$",
-            BYE, LIST);
-
-    private static final String validateMarkUnmarkDeleteRegex = String.format(
-            "(?i)^/(?<commandType>%s|%s|%s)(?:\\s+(?<index>.+))?$",
-            MARK, UNMARK, DELETE);
-    private static final Pattern validateMarkUnmarkDeletePattern = Pattern.compile(validateMarkUnmarkDeleteRegex);
-
-    private static final String descriptionRegex = "(?i)^/%s(?:\\s+(?<description>.+?))?";
-    private static final String validateTodoRegex = String.format(descriptionRegex, TODO);
-    private static final Pattern validateTodoPattern = Pattern.compile(validateTodoRegex);
-
-    private static final String validateDeadlineRegex = String.format(descriptionRegex
-            + "\\s+/by(?:\\s+(?<deadline>.+?))?$", DEADLINE);
-    private static final Pattern validateDeadlinePattern = Pattern.compile(validateDeadlineRegex);
-
-    private static final String validateEventRegex = String.format(descriptionRegex
-            + "\\s+/from(?:\\s+(?<from>.+?))?"
-            + "\\s+/to(?:\\s+(?<to>.+?))?", EVENT);
-    private static final Pattern validateEventPattern = Pattern.compile(validateEventRegex);
+public class Validator {
 
     public static void validate(String input) throws TARSInvalidCommandType, TARSInvalidCommandParam {
         validateCommandType(input);
@@ -37,7 +14,7 @@ public class Validator extends Parser {
     }
 
     private static void validateCommandType(String input) throws TARSInvalidCommandType {
-        Matcher matcher = commandTypePattern.matcher(input);
+        Matcher matcher = RegexConstants.COMMAND_TYPE_PATTERN.matcher(input);
 
         if (matcher.matches()) {
             String typeString = matcher.group("commandType").trim();
@@ -72,14 +49,14 @@ public class Validator extends Parser {
 
     private static void validateByeListCommand(String input, CommandType type)
             throws TARSInvalidCommandParam {
-        if (!input.matches(validateByeListRegex)) {
+        if (!input.matches(RegexConstants.VALIDATE_BYE_LIST_REGEX)) {
             throw new TARSInvalidCommandParam("/" + type + " command has no parameters.");
         }
     }
 
     private static void validateMarkUnmarkDeleteCommand(String input, CommandType type)
             throws TARSInvalidCommandParam {
-        Matcher matcher = validateMarkUnmarkDeletePattern.matcher(input);
+        Matcher matcher = RegexConstants.VALIDATE_MARK_UNMARK_DELETE_PATTERN.matcher(input);
         if (matcher.matches()) {
             String index = matcher.group("index");
             if (index == null) {
@@ -97,18 +74,18 @@ public class Validator extends Parser {
     }
 
     private static void validateTodoCommand(String input, CommandType type) throws TARSInvalidCommandParam {
-        Matcher matcher = validateTodoPattern.matcher(input);
+        Matcher matcher = RegexConstants.VALIDATE_TODO_PATTERN.matcher(input);
         String[] params = {"description"};
         validateObjectParams(type, params, matcher);
     }
 
     private static void validateDeadlineCommand(String input, CommandType type) throws TARSInvalidCommandParam {
-        Matcher matcher = validateDeadlinePattern.matcher(input);
+        Matcher matcher = RegexConstants.VALIDATE_DEADLINE_PATTERN.matcher(input);
         String[] params = {"description","deadline"};
         validateObjectParams(type, params, matcher);
     }
     private static void validateEventCommand(String input, CommandType type) throws TARSInvalidCommandParam {
-        Matcher matcher = validateEventPattern.matcher(input);
+        Matcher matcher = RegexConstants.VALIDATE_EVENT_PATTERN.matcher(input);
         String[] params = {"description","from","to"};
         validateObjectParams(type, params, matcher);
     }
