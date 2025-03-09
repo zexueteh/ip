@@ -8,20 +8,15 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.FileNotFoundException;
 
-
+/**
+ * Handles reading and writing task data to a storage file
+ */
 public class Storage {
     private static Storage instance = null;
     private static File dataFile;
     private static String dataFilePath;
 
-    /**
-     * On initialisation, check if data directory and file exists.
-     * If data directory or file do not exist, they are created.
-     * @param dataFolderPath
-     * @param dataFilePath
-     * @throws IOException
-     * @throws SecurityException
-     */
+
     private Storage(String dataFolderPath, String dataFilePath) throws TARSStorageFilePathException {
         File dataFolder = new File(dataFolderPath);
         Storage.dataFile = new File(dataFilePath);

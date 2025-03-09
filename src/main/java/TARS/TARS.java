@@ -14,6 +14,14 @@ public class TARS {
     private static Storage storage;
     private static TaskList tasks;
 
+    /**
+     * Initializes TARS chatbot from a flat file data.txt
+     * <p>
+     * Data is loaded from either an existing file, otherwise new task list is created if file is not found.
+     *
+     * @param dataFolderPath The path to the folder containing data.txt
+     * @param dataFilePath The path to data.txt
+     */
     public TARS(String dataFolderPath, String dataFilePath) {
         ui = Ui.getInstance();
 
@@ -29,7 +37,11 @@ public class TARS {
 
     }
 
-
+    /**
+     * Runs the chatbot, displays Hello message and processes user commands
+     * <p>
+     * Chatbot continues running until "/bye" command is entered
+     */
     public void run() {
         ui.printHelloMessage();
         boolean isExit = false;
@@ -53,17 +65,15 @@ public class TARS {
     /**
      * The main entry point into TARS Chatbot Application
      * <p>
-     * This method initializes the chatbot, displays a welcome message
-     * and maintains a handler loop for user input until "bye" command is entered.
-     * Users can add tasks, list tasks, mark tasks as done, unmark tasks
-     * <p>
-     * Commands supported
-     * - Add Task: Any text input added as task (Exceptions below)
-     * - List Tasks: command "list"
-     * - Marking Tasks as done: command "mark {task_number}"
-     * - Marking Tasks as undone: command "unmark {task_number}"
-     * - Exit: command "bye"
+     * Supported Commands:
+     * <ul>
+     * <li>Add Task: commands "/todo {description}", "/deadline {description} /by {deadline]", "/event {description} /from {start} /to {end}" for Todo, Deadline and Event tasks.</li>
+     * <li>List Tasks: command "/list"</li>
+     * <li>Marking/Unmarking Tasks as done/undone: command "/mark {index}", "/unmark {index}"</li>
+     * <li>Finding Tasks: "/find {searchTerm}" </li>
+     * <li>Exit: command "bye"</li>
      *
+     * </ul>
      * @param args String buffer
      */
     public static void main(String[] args) {
