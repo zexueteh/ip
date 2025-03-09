@@ -44,6 +44,9 @@ public class Validator {
         case EVENT:
             validateEventCommand(input, type);
             break;
+        case FIND:
+            validateFindCommand(input, type);
+            break;
         }
     }
 
@@ -90,6 +93,12 @@ public class Validator {
         validateObjectParams(type, params, matcher);
     }
 
+    private static void validateFindCommand(String input, CommandType type) throws TARSInvalidCommandParam {
+        Matcher matcher = RegexConstants.VALIDATE_FIND_PATTERN.matcher(input);
+        String[] params = {"searchTerm"};
+        validateObjectParams(type, params, matcher);
+    }
+
     private static void validateObjectParams(CommandType type, String[] params, Matcher matcher) throws TARSInvalidCommandParam {
         if (matcher.matches()) {
             for (String param : params) {
@@ -105,6 +114,7 @@ public class Validator {
             throw new TARSInvalidCommandParam("/" + type + " command requires " + String.join(", ", params) + " parameters.");
         }
     }
+
 
     public static void validateIndexParam(int numberTasks, int index) throws TARSInvalidCommandParam {
         if (index <= 0) {

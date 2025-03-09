@@ -30,16 +30,22 @@ public class RegexConstants {
             "(?i)^/(?<commandType>%s|%s|%s)(?:\\s+(?<index>.+))?$",
             MARK, UNMARK, DELETE);
     static final Pattern VALIDATE_MARK_UNMARK_DELETE_PATTERN = Pattern.compile(VALIDATE_MARK_UNMARK_DELETE_REGEX);
+
     private static final String DESCRIPTION_REGEX = "(?i)^/%s(?:\\s+(?<description>.+?))?";
     private static final String VALIDATE_EVENT_REGEX = String.format(DESCRIPTION_REGEX
             + "\\s+/from(?:\\s+(?<from>.+?))?"
             + "\\s+/to(?:\\s+(?<to>.+?))?", EVENT);
     static final Pattern VALIDATE_EVENT_PATTERN = Pattern.compile(VALIDATE_EVENT_REGEX);
+
     private static final String VALIDATE_DEADLINE_REGEX = String.format(DESCRIPTION_REGEX
             + "\\s+/by(?:\\s+(?<deadline>.+?))?$", DEADLINE);
     static final Pattern VALIDATE_DEADLINE_PATTERN = Pattern.compile(VALIDATE_DEADLINE_REGEX);
+
     private static final String VALIDATE_TODO_REGEX = String.format(DESCRIPTION_REGEX, TODO);
     static final Pattern VALIDATE_TODO_PATTERN = Pattern.compile(VALIDATE_TODO_REGEX);
+
+    private static final String VALIDATE_FIND_REGEX = String.format(DESCRIPTION_REGEX, FIND).replace("description", "searchTerm");
+    static final Pattern VALIDATE_FIND_PATTERN = Pattern.compile(VALIDATE_FIND_REGEX);
 
     private static final String DATE_REGEX = "\\b(19|20)\\d{2}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01])\\b";
     static final Pattern DATE_PATTERN = Pattern.compile(DATE_REGEX);
