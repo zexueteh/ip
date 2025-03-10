@@ -27,6 +27,7 @@ There are now 1 tasks in your list.
 
 ### 2. Adding Deadlines
 Users can add tasks with deadlines to keep track of their due dates.
+
 **Usage**
 ```
 /deadline {task_description} /by {due_date}
@@ -44,6 +45,7 @@ There are now 2 tasks in your list.
 
 ### 3. Adding Events
 Users can add events with start and end times.
+
 **Usage**
 ```
 /event {task_description} /from {start_time} /to {end_time}
@@ -61,6 +63,7 @@ There are now 3 tasks in your list.
 
 ### 4. Listing All Tasks
 Users can view all tasks in their list
+
 **Usage**
 ```
 /list
@@ -74,6 +77,7 @@ You have X task(s) in your list:
 ```
 ### 5. Marking Tasks as Done
 Users can mark tasks as completed.
+
 **Usage**
 ```
 /mark {task_number}
@@ -90,6 +94,7 @@ Task Done. Good Job Captain!
 
 ### 6. Unmarking Tasks
 Users can mark tasks as incomplete.
+
 **Usage**
 ```
 /unmark {task_number}
@@ -106,6 +111,7 @@ Ok, your task is marked as not done yet.
 
 ### 7. Deleting tasks
 Users can remove tasks from the list.
+
 **Usage**
 ```
 /delete {task_number}
@@ -121,6 +127,7 @@ Roger Captain/ I've deleted this task.
 ```
 ### 8. Finding tasks
 Users can remove tasks from the list.
+
 **Usage**
 ```
 /find {search_term}
@@ -137,6 +144,7 @@ Here are the tasks matching the search term: "team"
 ```
 ### 9. Exiting the Chatbot
 Users can exit the chatbot
+
 **Usage**
 ```
 /bye
