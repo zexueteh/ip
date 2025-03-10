@@ -1,6 +1,5 @@
 package TARS.task;
 
-import java.util.Locale;
 
 public enum TaskType {
     TODO, DEADLINE, EVENT, INVALID;

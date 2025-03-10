@@ -2,6 +2,7 @@ package TARS.logic;
 
 import TARS.command.*;
 
+
 import TARS.task.Task;
 import TARS.task.Todo;
 import TARS.task.Deadline;
@@ -11,9 +12,19 @@ import TARS.task.TaskType;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-
+/**
+ * Handles parsing of user input and file data.
+ */
 public class Parser {
-
+    /**
+     * Parses a user command and returns the corresponding {@code Command} object.
+     *
+     * @param line The user input string.
+     * @return A {@code Command} object representing the parsed command.
+     * @throws TARSParserTaskReadException If parsing fails when reading from storage file.
+     * @throws Validator.TARSInvalidCommandType If an invalid command type is provided by user input.
+     * @throws Validator.TARSInvalidCommandParam If command parameters in user input are invalid.
+     */
     public static Command parseCommand(String line)
             throws TARSParserTaskReadException,
             Validator.TARSInvalidCommandType,
@@ -40,6 +51,12 @@ public class Parser {
         return null;
     }
 
+    /**
+     * Parses the command type from a given user input string.
+     *
+     * @param line The input string.
+     * @return The corresponding {@code CommandType}.
+     */
     protected static CommandType parseCommandType(String line) {
         Matcher matcher = RegexConstants.COMMAND_TYPE_PATTERN.matcher(line);
         CommandType commandType = null;
@@ -47,14 +64,26 @@ public class Parser {
             String commandTypeString = matcher.group("commandType");
             commandType = CommandType.fromString(commandTypeString);
         }
-
         return commandType;
     }
 
+    /**
+     * Parses a task from a file line.
+     *
+     * @param line A line from the stored file.
+     * @return The parsed {@code Task} object.
+     * @throws TARSParserTaskReadException If parsing fails.
+     */
     public static Task parseFileLine(String line) throws TARSParserTaskReadException {
         return parseTask(line, RegexConstants.FILE_LINE_PATTERN);
     }
 
+    /**
+     * Extracts the task index from a user input string.
+     *
+     * @param line The input string.
+     * @return The extracted index.
+     */
     private static int parseIndex(String line) {
         int index = -1;
         Matcher matcher = RegexConstants.COMMAND_PATTERN.matcher(line);

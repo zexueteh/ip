@@ -2,11 +2,43 @@ package TARS.logic;
 
 import TARS.command.CommandType;
 import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-import static TARS.logic.Parser.parseCommandType;
+import static TARS.command.CommandType.*;
 
-public class Validator {
+/**
+ * Validates user input commands before parsing
+ */
+public class Validator extends Parser {
+    private static final String validateByeListRegex = String.format(
+            "(?i)^/(?<commandType>%s|%s)$",
+            BYE, LIST);
 
+    private static final String validateMarkUnmarkDeleteRegex = String.format(
+            "(?i)^/(?<commandType>%s|%s|%s)(?:\\s+(?<index>.+))?$",
+            MARK, UNMARK, DELETE);
+    private static final Pattern validateMarkUnmarkDeletePattern = Pattern.compile(validateMarkUnmarkDeleteRegex);
+
+    private static final String descriptionRegex = "(?i)^/%s(?:\\s+(?<description>.+?))?";
+    private static final String validateTodoRegex = String.format(descriptionRegex, TODO);
+    private static final Pattern validateTodoPattern = Pattern.compile(validateTodoRegex);
+
+    private static final String validateDeadlineRegex = String.format(descriptionRegex
+            + "\\s+/by(?:\\s+(?<deadline>.+?))?$", DEADLINE);
+    private static final Pattern validateDeadlinePattern = Pattern.compile(validateDeadlineRegex);
+
+    private static final String validateEventRegex = String.format(descriptionRegex
+            + "\\s+/from(?:\\s+(?<from>.+?))?"
+            + "\\s+/to(?:\\s+(?<to>.+?))?", EVENT);
+    private static final Pattern validateEventPattern = Pattern.compile(validateEventRegex);
+
+    /**
+     * Validates the user input command before parsing.
+     *
+     * @param input The user command.
+     * @throws TARSInvalidCommandType If the command type is invalid.
+     * @throws TARSInvalidCommandParam If command parameters are incorrect.
+     */
     public static void validate(String input) throws TARSInvalidCommandType, TARSInvalidCommandParam {
         validateCommandType(input);
         CommandType type = parseCommandType(input);
@@ -115,7 +147,13 @@ public class Validator {
         }
     }
 
-
+    /**
+     * Validates that the index parameter is within a valid range.
+     *
+     * @param numberTasks The total number of tasks.
+     * @param index The index to validate.
+     * @throws TARSInvalidCommandParam If the index is out of range.
+     */
     public static void validateIndexParam(int numberTasks, int index) throws TARSInvalidCommandParam {
         if (index <= 0) {
             throw new TARSInvalidCommandParam("index: " + index + " has to be greater than 0.");
