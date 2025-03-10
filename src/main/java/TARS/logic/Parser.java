@@ -87,12 +87,12 @@ public class Parser {
             to = matcher.group("to");
 
             if (pattern == RegexConstants.COMMAND_PATTERN) {
-                isDone = matcher.group("status").equals("X");
+                isDone = false;
                 by = DateTimeParser.parseParam(by);
                 from = DateTimeParser.parseParam(from);
                 to = DateTimeParser.parseParam(to);
             } else {
-                isDone = false;
+                isDone = matcher.group("status").equals("X");
             }
 
 
