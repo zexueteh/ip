@@ -4,7 +4,7 @@ package TARS.command;
  * Represents the different types of commands that can be executed by the chatbot.
  */
 public enum CommandType {
-    BYE, LIST, MARK, UNMARK, TODO, DEADLINE, EVENT, DELETE, FIND, INVALID;
+    BYE, LIST, MARK, UNMARK, TODO, DEADLINE, EVENT, DELETE, FIND, HELP, INVALID;
 
     /**
      * Converts a string command into its corresponding {@code CommandType}.

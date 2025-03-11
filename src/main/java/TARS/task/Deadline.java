@@ -19,9 +19,6 @@ public class Deadline extends Task {
         this.by = by;
     }
 
-    public Deadline(TaskType type, String description, String by) {
-        this(type, description, false, "");
-    }
 
     public String getBy() {
         return this.by;

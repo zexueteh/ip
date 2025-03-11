@@ -5,7 +5,7 @@ import java.util.regex.Pattern;
 import static TARS.command.CommandType.*;
 
 public class RegexConstants {
-    private static final String FILE_LINE_REGEX = "^\\[(?<taskType>T|D|E)]"
+    private static final String FILE_LINE_REGEX = "^\\[(?<taskType>[TDE])]"
             + "\\[\\s?(?<status>X?)]"
             + "\\s+(?<description>.+?)"
             + "(?:\\s*\\(by:\\s*(?<by>[^)]+)\\))?"
@@ -16,16 +16,16 @@ public class RegexConstants {
     protected static final Pattern COMMAND_TYPE_PATTERN = Pattern.compile(COMMAND_TYPE_REGEX);
 
     private static final String COMMAND_REGEX = "^(?i)/(?<taskType>\\S+)"
-            + "(?:\\s+(?<index>\\d+)$)?"
+            + "(?:\\s+(?<index>.+)$)?"
             + "(?:\\s+(?<description>.+?))?"
             + "(?i)(?:\\s+/by\\s+(?<by>.+?))?"
             + "(?i)(?:\\s+/from\\s+(?<from>.+?))?"
             + "(?i)(?:\\s+/to\\s+(?<to>.+?))?";
     protected static final Pattern COMMAND_PATTERN = Pattern.compile(COMMAND_REGEX);
 
-    static final String VALIDATE_BYE_LIST_REGEX = String.format(
-            "(?i)^/(?<commandType>%s|%s)$",
-            BYE, LIST);
+    static final String VALIDATE_BYE_LIST_HELP_REGEX = String.format(
+            "(?i)^/(?<commandType>%s|%s|%s)$",
+            BYE, LIST, HELP);
     private static final String VALIDATE_MARK_UNMARK_DELETE_REGEX = String.format(
             "(?i)^/(?<commandType>%s|%s|%s)(?:\\s+(?<index>.+))?$",
             MARK, UNMARK, DELETE);

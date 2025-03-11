@@ -35,13 +35,7 @@ public abstract class Task {
     public String getDescription() {
         return description;
     }
-    public void setDescription(String description) {
-        this.description = description;
-    }
 
-    public boolean isDone() {
-        return isDone;
-    }
     public void setIsDone(boolean isDone) {
         this.isDone = isDone;
     }
@@ -49,7 +43,7 @@ public abstract class Task {
 
     @Override
     public String toString() {
-        return "[" + type + "][" + (this.isDone ? "X" : " ") + "] " + this.description;
+        return "[" + type + "][" + (this.isDone ? "X" : " ") + "] " + getDescription();
     }
 
 }

@@ -18,7 +18,7 @@ public class Ui {
             \t   | |/ ___ \\|  _ < ___) |
             \t   |_/_/   \\_\\_| \\_\\____/
             \tHello, I'm TARS, your friendly chatbot assistant.
-            \tHow can I help you today?""";
+            \tHow can I help you today? (hint: Type /help to begin)""";
     private static final String GOODBYE_MESSAGE = "Goodnight Captain. Sleep well.";
 
 

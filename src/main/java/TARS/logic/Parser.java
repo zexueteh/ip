@@ -1,6 +1,14 @@
 package TARS.logic;
 
-import TARS.command.*;
+import TARS.command.Command;
+import TARS.command.CommandType;
+import TARS.command.AddCommand;
+import TARS.command.DeleteCommand;
+import TARS.command.FindCommand;
+import TARS.command.ListCommand;
+import TARS.command.MarkCommand;
+import TARS.command.ByeCommand;
+import TARS.command.HelpCommand;
 
 
 import TARS.task.Task;
@@ -47,6 +55,8 @@ public class Parser {
         case FIND:
             String searchTerm = parseSearchTerm(line);
             return new FindCommand(searchTerm);
+        case HELP:
+            return new HelpCommand();
         }
         return null;
     }

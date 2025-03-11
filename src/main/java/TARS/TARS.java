@@ -54,7 +54,7 @@ public class TARS {
                 c.execute(tasks, ui, storage);
                 isExit = c.isExit();
             } catch (Exception e) {
-                System.out.println(e.getMessage());
+                ui.printResponseMessage(e.getMessage());
             } finally {
                 ui.printLineDivider();
             }

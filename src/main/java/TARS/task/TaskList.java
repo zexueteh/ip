@@ -10,7 +10,7 @@ import TARS.logic.Parser;
  */
 public class TaskList {
 
-    private final ArrayList<Task> taskList =new ArrayList<>();
+    private final ArrayList<Task> taskList = new ArrayList<>();
 
     /**
      * Constructs a {@code TaskList} from raw file data.

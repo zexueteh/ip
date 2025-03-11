@@ -1,6 +1,5 @@
 package TARS.command;
 
-import TARS.logic.Validator;
 import TARS.task.Task;
 import TARS.task.TaskList;
 import TARS.util.Storage;

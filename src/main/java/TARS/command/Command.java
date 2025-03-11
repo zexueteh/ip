@@ -49,5 +49,5 @@ public abstract class Command {
             throws Validator.TARSInvalidCommandParam, Storage.TARSStorageOperationException;
     public boolean isExit() {
         return false;
-    };
+    }
 }

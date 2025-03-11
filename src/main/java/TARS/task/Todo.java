@@ -16,7 +16,4 @@ public class Todo extends Task {
         super(type, description, isDone);
     }
 
-    public Todo(TaskType type,  String Description) {
-        super(type, Description);
-    }
 }
