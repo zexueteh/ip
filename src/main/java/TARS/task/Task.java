@@ -40,6 +40,9 @@ public abstract class Task {
         this.isDone = isDone;
     }
 
+    public boolean contains(String term) {
+        return description.contains(term);
+    }
 
     @Override
     public String toString() {

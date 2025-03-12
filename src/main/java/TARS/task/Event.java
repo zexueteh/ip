@@ -25,11 +25,18 @@ public class Event extends Task {
     public String getTo(){
         return to;
     }
+    public String getFrom(){
+        return from;
+    }
 
     public void setTo(String to){
         this.to = to;
     }
 
+    @Override
+    public boolean contains(String term) {
+        return super.contains(term) || getTo().contains(term) || getFrom().contains(term);
+    }
 
     @Override
     public String toString() {

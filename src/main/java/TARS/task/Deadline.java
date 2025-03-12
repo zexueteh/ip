@@ -28,6 +28,11 @@ public class Deadline extends Task {
     }
 
     @Override
+    public boolean contains(String term) {
+        return super.contains(term) || getBy().contains(term);
+    }
+
+    @Override
     public String toString() {
         return super.toString() + " (by: " + this.by + ")";
     }

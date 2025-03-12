@@ -18,9 +18,8 @@ public class FindCommand extends Command {
 
         for (int i = 0; i < numberTasks; i++) {
             Task task = taskList.getTask(i);
-            String taskString = task.toString();
 
-            if (taskString.contains(searchTerm)) {
+            if (task.contains(searchTerm)) {
                 ui.printResponseMessage(String.format("%d.%s", i+1, task));
             }
 
