@@ -96,7 +96,7 @@ public class Parser {
      */
     private static int parseIndex(String line) {
         int index = -1;
-        Matcher matcher = RegexConstants.COMMAND_PATTERN.matcher(line);
+        Matcher matcher = RegexConstants.INDEX_COMMAND_PATTERN.matcher(line);
         if (matcher.matches()) {
             index = Integer.parseInt(matcher.group("index"));
         }

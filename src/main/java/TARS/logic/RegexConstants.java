@@ -15,8 +15,11 @@ public class RegexConstants {
     private static final String COMMAND_TYPE_REGEX = "^/(?<commandType>\\S+)(?:\\s+(?<arguments>.+))?$";
     protected static final Pattern COMMAND_TYPE_PATTERN = Pattern.compile(COMMAND_TYPE_REGEX);
 
+    private static final String INDEX_COMMAND_REGEX = "^(?i)/(?<taskType>\\S+)" + "(?:\\s+(?<index>.+?)$)?";
+    protected static final Pattern INDEX_COMMAND_PATTERN = Pattern.compile(INDEX_COMMAND_REGEX);
+
     private static final String COMMAND_REGEX = "^(?i)/(?<taskType>\\S+)"
-            + "(?:\\s+(?<index>.+)$)?"
+           // + "(?:\\s+(?<index>.+)$)?"
             + "(?:\\s+(?<description>.+?))?"
             + "(?i)(?:\\s+/by\\s+(?<by>.+?))?"
             + "(?i)(?:\\s+/from\\s+(?<from>.+?))?"
@@ -47,10 +50,10 @@ public class RegexConstants {
     private static final String VALIDATE_FIND_REGEX = String.format(DESCRIPTION_REGEX, FIND).replace("description", "searchTerm");
     static final Pattern VALIDATE_FIND_PATTERN = Pattern.compile(VALIDATE_FIND_REGEX);
 
-    private static final String DATE_REGEX = "\\b(19|20)\\d{2}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01])\\b";
+    private static final String DATE_REGEX = "\\b\\d{4}-\\d{2}-\\d{2}\\b";
     static final Pattern DATE_PATTERN = Pattern.compile(DATE_REGEX);
 
-    private static final String TIME_REGEX = "\\b([01]\\d|2[0-3])[0-5]\\d(?!-)\\b";
+    private static final String TIME_REGEX = "\\b\\d{2}:\\d{2}\\b";
     static final Pattern TIME_PATTERN = Pattern.compile(TIME_REGEX);
 
 }
