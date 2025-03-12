@@ -19,6 +19,7 @@ Users can add basic to-do tasks with a description.
 /todo Go to the gym
 ```
 **Expected Output**
+Task added with specified description. Backslash characters are reserved for command words and argument flags e.g. /todo, /by. Command words are case-insensitive.
 ```
 Yes Captain. I've added the following task:
 [T][ ] Go to the gym
@@ -27,32 +28,33 @@ There are now 1 tasks in your list.
 
 ### 2. Adding Deadlines
 Users can add tasks with deadlines to keep track of their due dates.
-
+Deadlines have a /by parameter.
 **Usage**
 ```
 /deadline {task_description} /by {due_date}
 ```
 **Example**
 ```
-/deadline Submit team report /by Weds 2025-04-30
+/deadline Submit team report /by Weds 2025-04-30 at 17:00
 ```
 **Expected Output**
+Dates/times in the /by parameter undergo format conversion. Dates in the format `yyyy-mm-dd` are converted to `d MMM yyy`. Times in the format `HH:mm` are converted to `h.mm a`.
 ```
 Yes Captain. I've added the following task:
-[D][ ] Submit team report (by: Weds 30 Apr 2025)
+[D][ ] Submit team report (by: Weds 30 Apr 2025 at 5.00 pm)
 There are now 2 tasks in your list.
 ```
 
 ### 3. Adding Events
 Users can add events with start and end times.
-
+Events have /from and /to parameters. They behave similarly to the /by parameter.
 **Usage**
 ```
 /event {task_description} /from {start_time} /to {end_time}
 ```
 **Example**
 ```
-/event Meeting with the team /from tomorrow 1400 /to 1600
+/event Meeting with the team /from tomorrow 14:00 /to 16:00
 ```
 **Expected Output**
 ```
@@ -72,7 +74,7 @@ Users can view all tasks in their list
 ```
 You have X task(s) in your list:
 1. [T][ ] Go to the gym
-2. [D][ ] Submit team report (by: Weds 30 Apr 2025)
+2. [D][ ] Submit team report (by: Weds 30 Apr 2025 at 5.00 pm)
 3. [E][ ] Meeting with the team (from: 2.00 pm to: 4.00pm)
 ```
 ### 5. Marking Tasks as Done
@@ -126,7 +128,7 @@ Roger Captain/ I've deleted this task.
 [T][ ] Go to the gym
 ```
 ### 8. Finding tasks
-Users can remove tasks from the list.
+Users can search for a task based on description, deadline, start and end times.
 
 **Usage**
 ```
@@ -142,8 +144,20 @@ Here are the tasks matching the search term: "team"
 2. [D][ ] Submit team report (by: Weds 30 Apr 2025)
 3. [E][ ] Meeting with the team (from: 2.00 pm to: 4.00pm)
 ```
-### 9. Exiting the Chatbot
-Users can exit the chatbot
+### 9. Help with Chatbot Commands
+Users can look up the possible commands and their usage.
+
+**Usage**
+```
+/help
+```
+**Expected Output**
+```
+Here are the available commands you can use:
+... ...
+```
+### 10. Exiting the Chatbot
+Users can exit the chatbot.
 
 **Usage**
 ```
