@@ -6,7 +6,7 @@ import java.time.format.DateTimeParseException;
 import java.util.regex.Matcher;
 
 public class DateTimeParser {
-    public static String parseParam(String param) {
+    public static String parseParam(String param) throws DateTimeParseException {
         if (param != null) {
             LocalDateTime dateTime = getDateTime(param);
             return replaceDateTime(param, dateTime);
@@ -36,10 +36,10 @@ public class DateTimeParser {
         return param;
     }
 
-    private static LocalDateTime getDateTime(String param) {
+    private static LocalDateTime getDateTime(String param) throws DateTimeParseException {
         LocalDateTime dateTime = null;
         String dateTimeString = "";
-        String formatString = "yyyy-MM-ddHHmm";
+        String formatString = "yyyy-MM-ddHH:mm";
 
         Matcher dateMatcher = RegexConstants.DATE_PATTERN.matcher(param);
         Matcher timeMatcher = RegexConstants.TIME_PATTERN.matcher(param);
@@ -52,14 +52,12 @@ public class DateTimeParser {
         if (timeMatcher.find()) {
             dateTimeString += timeMatcher.group().trim();
         } else {
-            dateTimeString += "0000";
+            dateTimeString += "00:00";
         }
-        try {
-            if (!dateTimeString.equals("9999-12-310000")) {
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern(formatString);
-                dateTime = LocalDateTime.parse(dateTimeString, formatter);
-            }
-        } catch (DateTimeParseException ignored) {
+
+        if (!dateTimeString.equals("9999-12-3100:/00")) {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern(formatString);
+            dateTime = LocalDateTime.parse(dateTimeString, formatter);
         }
 
         return dateTime;
